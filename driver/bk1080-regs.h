@@ -29,6 +29,22 @@ enum BK1080_Register_t {
 
 typedef enum BK1080_Register_t BK1080_Register_t;
 
+// REG 05
+#define BK1080_REG_05_SHIFT_SEEKTH              8
+#define BK1080_REG_05_SHIFT_BAND                6
+#define BK1080_REG_05_SHIFT_SPACE               4
+#define BK1080_REG_05_SHIFT_VOLUME              0
+
+#define BK1080_REG_05_MASK_SEEKTH               (0x003U << BK1080_REG_05_SHIFT_SEEKTH)
+#define BK1080_REG_05_MASK_BAND                 (0x003U << BK1080_REG_05_SHIFT_BAND)
+#define BK1080_REG_05_MASK_SPACE                (0x003U << BK1080_REG_05_SHIFT_SPACE)
+#define BK1080_REG_05_MASK_VOLUME               (0x00FU << BK1080_REG_05_SHIFT_VOLUME)
+
+#define BK1080_REG_05_GET_SEEKTH                (((x) & BK1080_REG_05_MASK_SEEKTH) >> BK1080_REG_05_SHIFT_SEEKTH)
+#define BK1080_REG_05_GET_BAND                  (((x) & BK1080_REG_05_MASK_BAND) >> BK1080_REG_05_SHIFT_BAND)
+#define BK1080_REG_05_GET_SPACE                 (((x) & BK1080_REG_05_MASK_SPACE) >> BK1080_REG_05_SHIFT_SPACE)
+#define BK1080_REG_05_GET_VOLUME                (((x) & BK1080_REG_05_MASK_VOLUME) >> BK1080_REG_05_SHIFT_VOLUME)
+
 // REG 07
 
 #define BK1080_REG_07_SHIFT_FREQD		4
