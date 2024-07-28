@@ -94,12 +94,12 @@ void SETTINGS_InitEEPROM(void)
 			uint8_t  selChn;
 			uint8_t  isMrMode:1;
 			uint8_t  band:2;
-			//uint8_t  space:2;
+			uint8_t  space:2;
 		} __attribute__((packed)) fmCfg;
 		EEPROM_ReadBuffer(0x0E88, &fmCfg, 4);
 
 		gEeprom.FM_Band = fmCfg.band;
-		//gEeprom.FM_Space = fmCfg.space;
+		gEeprom.FM_Space = fmCfg.space;
 		gEeprom.FM_SelectedFrequency = 
 			(fmCfg.selFreq >= BK1080_GetFreqLoLimit(gEeprom.FM_Band) && fmCfg.selFreq <= BK1080_GetFreqHiLimit(gEeprom.FM_Band)) ? 
 				fmCfg.selFreq : BK1080_GetFreqLoLimit(gEeprom.FM_Band);
@@ -465,7 +465,7 @@ void SETTINGS_SaveFM(void)
 				uint8_t  selChn;
 				uint8_t  isMrMode:1;
 				uint8_t  band:2;
-				//uint8_t  space:2;
+				uint8_t  space:2;
 			};
 			uint8_t __raw[8];
 		} __attribute__((packed)) fmCfg;
@@ -475,7 +475,7 @@ void SETTINGS_SaveFM(void)
 		fmCfg.selFreq  = gEeprom.FM_SelectedFrequency;
 		fmCfg.isMrMode = gEeprom.FM_IsMrMode;
 		fmCfg.band     = gEeprom.FM_Band;
-		//fmCfg.space    = gEeprom.FM_Space;
+		fmCfg.space    = gEeprom.FM_Space;
 		EEPROM_WriteBuffer(0x0E88, fmCfg.__raw);
 
 		for (unsigned i = 0; i < 6; i++)

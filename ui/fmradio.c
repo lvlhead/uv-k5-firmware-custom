@@ -71,9 +71,9 @@ void UI_DisplayFM(void)
 
         UI_PrintStringSmallNormal(String, 1, 0, 5);
 
-	//uint8_t spacings[] = {20,10,5};
-	//sprintf(String, "%d0k", spacings[gEeprom.FM_Space % 3]);
-	//UI_PrintStringSmallNormal(String, 127 - 4*7, 0, 6);
+	uint8_t spacings[] = {20,10,5};
+	sprintf(String, "%d0k", spacings[gEeprom.FM_Space % 3]);
+	UI_PrintStringSmallNormal(String, 127 - 4*7, 0, 6);
 
 	if (gAskToSave) {
 		pPrintStr = "SAVE?";

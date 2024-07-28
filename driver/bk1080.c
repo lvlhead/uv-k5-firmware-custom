@@ -41,10 +41,10 @@ uint16_t BK1080_FrequencyDeviation;
 
 void BK1080_Init0(void)
 {
-	BK1080_Init(0,0/*,0*/);
+	BK1080_Init(0,0,0);
 }
 
-void BK1080_Init(uint16_t freq, uint8_t band/*, uint8_t space*/)
+void BK1080_Init(uint16_t freq, uint8_t band, uint8_t space)
 {
 	unsigned int i;
 
@@ -69,7 +69,7 @@ void BK1080_Init(uint16_t freq, uint8_t band/*, uint8_t space*/)
 		}
 
 		BK1080_WriteRegister(BK1080_REG_05_SYSTEM_CONFIGURATION2, 0x0A1F);
-		BK1080_SetFrequency(freq, band/*, space*/);
+		BK1080_SetFrequency(freq, band, space);
 	}
 	else {
 		BK1080_WriteRegister(BK1080_REG_02_POWER_CONFIGURATION, 0x0241);
@@ -105,16 +105,16 @@ void BK1080_Mute(bool Mute)
 	BK1080_WriteRegister(BK1080_REG_02_POWER_CONFIGURATION, Mute ? 0x4201 : 0x0201);
 }
 
-void BK1080_SetFrequency(uint16_t frequency, uint8_t band/*, uint8_t space*/)
+void BK1080_SetFrequency(uint16_t frequency, uint8_t band, uint8_t space)
 {
-	//uint8_t spacings[] = {20,10,5};
-	//space %= 3;
+	uint8_t spacings[] = {20,10,5};
+	space %= 3;
 
-	uint16_t channel = (frequency - BK1080_GetFreqLoLimit(band))/* * 10 / spacings[space]*/;
+	uint16_t channel = (frequency - BK1080_GetFreqLoLimit(band)) * 10 / spacings[space];
 
 	uint16_t regval = BK1080_ReadRegister(BK1080_REG_05_SYSTEM_CONFIGURATION2);
 	regval = (regval & ~(0b11 << 6)) | ((band & 0b11) << 6);
-	//regval = (regval & ~(0b11 << 4)) | ((space & 0b11) << 4);
+	regval = (regval & ~(0b11 << 4)) | ((space & 0b11) << 4);
 
 	BK1080_WriteRegister(BK1080_REG_05_SYSTEM_CONFIGURATION2, regval);
 
