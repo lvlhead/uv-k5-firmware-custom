@@ -39,7 +39,7 @@ extern uint8_t           gFM_ChannelPosition;
 extern uint16_t          gFM_FrequencyDeviation;
 extern bool              gFM_FoundFrequency;
 extern uint16_t          gFM_RestoreCountdown_10ms;
-extern uint8_t           gFM_Space;
+extern int8_t           gFM_Space;
 
 bool    FM_CheckValidChannel(uint8_t Channel);
 // returns first valid channel starting at Channel

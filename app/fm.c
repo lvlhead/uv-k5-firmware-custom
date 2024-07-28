@@ -46,7 +46,7 @@ uint8_t           gFM_ChannelPosition;
 bool              gFM_FoundFrequency;
 bool              gFM_AutoScan;
 uint16_t          gFM_RestoreCountdown_10ms;
-uint8_t           gFM_Space;
+int8_t            gFM_Space;
 
 
 
@@ -536,7 +536,7 @@ void FM_ProcessKeys(KEY_Code_t Key, bool bKeyPressed, bool bKeyHeld)
 			break;
 		case KEY_DOWN:
 			Key_UP_DOWN(state, -1);
-			break;;
+			break;
 		case KEY_EXIT:
 			Key_EXIT(state);
 			break;
@@ -594,6 +594,7 @@ void FM_Start(void)
 	gFmRadioMode              = true;
 	gFM_ScanState             = FM_SCAN_OFF;
 	gFM_RestoreCountdown_10ms = 0;
+	gFM_Space = 0;
 
 	BK1080_Init(gEeprom.FM_FrequencyPlaying, gEeprom.FM_Band, gFM_Space);
 
