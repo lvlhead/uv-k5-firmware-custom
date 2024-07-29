@@ -4,6 +4,7 @@
 #ifdef ENABLE_UART
 
 #include "driver/uart.h"
+#include "driver/bk1080.h"
 #include "driver/bk4819.h"
 #include "string.h"
 #include "external/printf/printf.h"
@@ -24,9 +25,14 @@ static inline void LogUartf(const char* format, ...)
 	UART_Send(buffer, strlen(buffer));
 }
 
-static inline void LogRegUart(uint16_t reg)
+static inline void LogRegUart(uint16_t reg, bool bk1080)
 {
-	uint16_t regVal = BK4819_ReadRegister(reg);
+	uint16_t regVal;
+	if (bk1080) {
+		regVal = BK1080_ReadRegister(reg);
+	} else {
+		regVal = BK4819_ReadRegister(reg);
+	}
 	char buf[32];
 	sprintf(buf, "reg%02X: %04X\n", reg, regVal);
 	LogUart(buf);
