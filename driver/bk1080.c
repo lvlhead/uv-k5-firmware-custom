@@ -16,6 +16,7 @@
 
 #include "bsp/dp32g030/gpio.h"
 #include "bk1080.h"
+#include "debugging.h"
 #include "driver/gpio.h"
 #include "driver/i2c.h"
 #include "driver/system.h"
@@ -113,7 +114,7 @@ void BK1080_Init(uint16_t freq, uint8_t band, uint8_t space)
 			BK1080_WriteRegister(BK1080_REG_02_POWER_CONFIGURATION, 0x0201);
 		}
 
-		// (0x1F0A, 0001 1111 0000 1010) Volume (0101), Space (00), Band (00), SeekTh (1111 1000)
+		// (0x0A1F, 0000 1010 0001 1111) Volume (1111), Space (10), Band (00), SeekTh (0101 0000)
 		BK1080_WriteRegister(BK1080_REG_05_SYSTEM_CONFIGURATION2, 0x0A1F);
 		BK1080_SetFrequency(freq, band, space);
 	}
@@ -156,20 +157,27 @@ void BK1080_Mute(bool Mute)
 
 void BK1080_SetFrequency(uint16_t frequency, uint8_t band, uint8_t space)
 {
+	//LogUart("BK1080_SetFrequency\n");
 	uint8_t spacings[] = {20,10,5};
 	space %= 3;
 
 	uint16_t channel = (frequency - BK1080_GetFreqLoLimit(band)) * 10 / spacings[space];
 
 	uint16_t regval = BK1080_ReadRegister(BK1080_REG_05_SYSTEM_CONFIGURATION2);
+	//LogRegUart(BK1080_REG_05_SYSTEM_CONFIGURATION2, true);
 	regval = (regval & ~(0b11 << 6)) | ((band & 0b11) << 6);
 	regval = (regval & ~(0b11 << 4)) | ((space & 0b11) << 4);
 
+	// REG05 - Update BAND and SPACE
 	BK1080_WriteRegister(BK1080_REG_05_SYSTEM_CONFIGURATION2, regval);
+	//LogRegUart(BK1080_REG_05_SYSTEM_CONFIGURATION2, true);
 
+	// REG03 - Write channel, wait, and then enable the TUNE bit
+	//LogRegUart(BK1080_REG_03_CHANNEL, true);
 	BK1080_WriteRegister(BK1080_REG_03_CHANNEL, channel);
 	SYSTEM_DelayMs(10);
 	BK1080_WriteRegister(BK1080_REG_03_CHANNEL, channel | 0x8000);
+	//LogRegUart(BK1080_REG_03_CHANNEL, true);
 }
 
 void BK1080_GetFrequencyDeviation(uint16_t Frequency)
