@@ -27,7 +27,7 @@ enum BK1080_Register_t {
 	BK1080_REG_06_SYSTEM_CONFIGURATION3 = 0x06U,
 	BK1080_REG_07                       = 0x07U,
 /*	BK1080_REG_08                       = 0x08U,	// Test 2, default value 0x0000 */
-/*	BK1080_REG_09                       = 0x08U,	// Boot Configuration, default value 0x0000 */
+/*	BK1080_REG_09                       = 0x09U,	// Boot Configuration, default value 0x0000 */
 	BK1080_REG_10                       = 0x0AU,
 	BK1080_REG_11                       = 0x0BU,
 	BK1080_REG_25_INTERNAL              = 0x19U,
