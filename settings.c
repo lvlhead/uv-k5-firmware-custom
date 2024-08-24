@@ -27,6 +27,7 @@
 #include "settings.h"
 #include "ui/menu.h"
 
+/*
 static const uint32_t gDefaultFrequencyTable[] =
 {
     14500000,    //
@@ -35,6 +36,7 @@ static const uint32_t gDefaultFrequencyTable[] =
     43320000,    //
     43350000     //
 };
+*/
 
 EEPROM_Config_t gEeprom = { 0 };
 
@@ -281,7 +283,7 @@ void SETTINGS_InitEEPROM(void)
     #endif
     #ifndef ENABLE_FEAT_F4HWN
         #ifdef ENABLE_AM_FIX
-            gSetting_AM_fix        = !!(Data[7] & (1u << 5));
+            //gSetting_AM_fix        = !!(Data[7] & (1u << 5));
         #endif
     #endif
     gSetting_backlight_on_tx_rx = (Data[7] >> 6) & 3u;
@@ -487,6 +489,7 @@ void SETTINGS_FactoryReset(bool bIsAll)
         RADIO_InitInfo(gRxVfo, FREQ_CHANNEL_FIRST + BAND6_400MHz, 43350000);
 
         // set the first few memory channels
+		/* don't need this
         for (i = 0; i < ARRAY_SIZE(gDefaultFrequencyTable); i++)
         {
             const uint32_t Frequency   = gDefaultFrequencyTable[i];
@@ -495,6 +498,7 @@ void SETTINGS_FactoryReset(bool bIsAll)
             gRxVfo->Band               = FREQUENCY_GetBand(Frequency);
             SETTINGS_SaveChannel(MR_CHANNEL_FIRST + i, 0, gRxVfo, 2);
         }
+	*/
 
         #ifdef ENABLE_FEAT_F4HWN
             EEPROM_WriteBuffer(0x1FF0, Template);
@@ -524,7 +528,7 @@ void SETTINGS_SaveFM(void)
         //fmCfg.space    = gEeprom.FM_Space;
         EEPROM_WriteBuffer(0x0E88, fmCfg.__raw);
 
-        for (unsigned i = 0; i < 5; i++)
+        for (unsigned i = 0; i < 6; i++)
             EEPROM_WriteBuffer(0x0E40 + (i * 8), &gFM_Channels[i * 4]);
     }
 #endif
@@ -670,12 +674,9 @@ void SETTINGS_SaveSettings(void)
 
     tmp = 0;
 
-    if (gEeprom.SCAN_LIST_ENABLED[0] == 1)
-        tmp = tmp | (1 << 0);
-    if (gEeprom.SCAN_LIST_ENABLED[1] == 1)
-        tmp = tmp | (1 << 1);
-    if (gEeprom.SCAN_LIST_ENABLED[2] == 1)
-        tmp = tmp | (1 << 2);
+	if (gEeprom.SCAN_LIST_ENABLED[0] == 1) tmp |= 1 << 0;
+	if (gEeprom.SCAN_LIST_ENABLED[1] == 1) tmp |= 1 << 1;
+	if (gEeprom.SCAN_LIST_ENABLED[2] == 1) tmp |= 1 << 2;
 
     State[1] = tmp;
     State[2] = gEeprom.SCANLIST_PRIORITY_CH1[0];
@@ -710,7 +711,7 @@ void SETTINGS_SaveSettings(void)
     #endif
     #ifndef ENABLE_FEAT_F4HWN
         #ifdef ENABLE_AM_FIX
-            if (!gSetting_AM_fix)            State[7] &= ~(1u << 5);
+            //if (!gSetting_AM_fix)            State[7] &= ~(1u << 5);
         #endif
     #endif
     State[7] = (State[7] & ~(3u << 6)) | ((gSetting_backlight_on_tx_rx & 3u) << 6);

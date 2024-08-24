@@ -34,7 +34,7 @@ bool backlightOn;
 void BACKLIGHT_InitHardware()
 {
     // 48MHz / 94 / 1024 ~ 500Hz
-    const uint32_t PWM_FREQUENCY_HZ =  25000;
+    const uint32_t PWM_FREQUENCY_HZ =  4096;
     PWM_PLUS0_CLKSRC |= ((48000000 / 1024 / PWM_FREQUENCY_HZ) << 16);
     PWM_PLUS0_PERIOD = 1023;
 
@@ -73,10 +73,11 @@ static void BACKLIGHT_Sound(void)
 
 void BACKLIGHT_TurnOn(void)
 {
+/*
     #ifdef ENABLE_FEAT_F4HWN
         gBacklightBrightnessOld = BACKLIGHT_GetBrightness();
     #endif
-
+*/
     if (gEeprom.BACKLIGHT_TIME == 0) {
         BACKLIGHT_TurnOff();
         #ifdef ENABLE_FEAT_F4HWN
@@ -91,7 +92,7 @@ void BACKLIGHT_TurnOn(void)
     backlightOn = true;
 
 #ifdef ENABLE_FEAT_F4HWN
-    if(gK5startup == true) {
+/*    if(gK5startup == true) {
         for(uint8_t i = 0; i <= gEeprom.BACKLIGHT_MAX; i++)
         {
             BACKLIGHT_SetBrightness(i);
@@ -105,6 +106,7 @@ void BACKLIGHT_TurnOn(void)
         BACKLIGHT_SetBrightness(gEeprom.BACKLIGHT_MAX);
     }
 #else
+*/
     BACKLIGHT_SetBrightness(gEeprom.BACKLIGHT_MAX);
 #endif
 
