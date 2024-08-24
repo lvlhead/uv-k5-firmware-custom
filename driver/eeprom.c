@@ -20,6 +20,7 @@
 #include "driver/eeprom.h"
 #include "driver/i2c.h"
 #include "driver/system.h"
+#include "driver/bk4819.h"
 
 void EEPROM_ReadBuffer(uint16_t Address, void *pBuffer, uint8_t Size)
 {
@@ -51,6 +52,8 @@ void EEPROM_WriteBuffer(uint16_t Address, const void *pBuffer)
         return;
     }
 
+    BK4819_ToggleGpioOut(BK4819_GPIO5_PIN1_RED, true);
+
     I2C_Start();
     I2C_Write(0xA0);
     I2C_Write((Address >> 8) & 0xFF);
@@ -59,5 +62,8 @@ void EEPROM_WriteBuffer(uint16_t Address, const void *pBuffer)
     I2C_Stop();
 
     // give the EEPROM time to burn the data in (apparently takes 5ms)
-    SYSTEM_DelayMs(8);
+    SYSTEM_DelayMs(20);
+
+    BK4819_ToggleGpioOut(BK4819_GPIO5_PIN1_RED, false);
+
 }
