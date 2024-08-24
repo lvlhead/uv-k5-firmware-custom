@@ -4,14 +4,14 @@
 # 1 = enable
 
 # ---- STOCK QUANSHENG FERATURES ----
-ENABLE_FMRADIO                	?= 0
+ENABLE_FMRADIO                	?= 1
 ENABLE_UART                   	?= 1
 ENABLE_AIRCOPY                	?= 1
 ENABLE_NOAA                   	?= 0
 ENABLE_VOICE                  	?= 0
-ENABLE_VOX                    	?= 1
+ENABLE_VOX                    	?= 0
 ENABLE_ALARM                  	?= 0
-ENABLE_TX1750                 	?= 1
+ENABLE_TX1750                 	?= 0
 ENABLE_PWRON_PASSWORD         	?= 0
 ENABLE_DTMF_CALLING           	?= 0
 ENABLE_FLASHLIGHT             	?= 1
@@ -26,7 +26,7 @@ ENABLE_WIDE_RX                	?= 1
 ENABLE_TX_WHEN_AM             	?= 0
 ENABLE_F_CAL_MENU             	?= 0
 ENABLE_CTCSS_TAIL_PHASE_SHIFT 	?= 0
-ENABLE_BOOT_BEEPS             	?= 0
+ENABLE_BOOT_BEEPS             	?= 1
 ENABLE_SHOW_CHARGE_LEVEL      	?= 0
 ENABLE_REVERSE_BAT_SYMBOL     	?= 0
 ENABLE_NO_CODE_SCAN_TIMEOUT   	?= 1
@@ -47,7 +47,8 @@ ENABLE_FEAT_F4HWN_RX_TX_TIMER   ?= 1
 ENABLE_FEAT_F4HWN_CHARGING_C    ?= 1
 ENABLE_FEAT_F4HWN_PMR         	?= 0
 ENABLE_FEAT_F4HWN_GMRS_FRS_MURS	?= 0
-ENABLE_FEAT_F4HWN_CA         	?= 1
+ENABLE_FEAT_F4HWN_CA         	?= 0
+ENABLE_FEAT_VOXLESS		?= 1
 
 # ---- DEBUGGING ----
 ENABLE_AM_FIX_SHOW_DATA       	?= 0
@@ -62,8 +63,8 @@ ENABLE_LTO                    	?= 1
 
 #############################################################
 
-ifeq ($(ENABLE_FEAT_F4HWN),1)
-	TARGET = f4hwn
+ifeq ($(ENABLE_FEAT_VOXLESS),1)
+	TARGET = voxless
 else
 	TARGET = firmware
 endif
@@ -212,12 +213,12 @@ endif
 OBJCOPY = arm-none-eabi-objcopy
 SIZE = arm-none-eabi-size
 
-ifeq ($(ENABLE_FEAT_F4HWN),1)
-	AUTHOR_STRING_1 ?= EGZUMER
-	VERSION_STRING_1 ?= v0.22
+ifeq ($(ENABLE_FEAT_VOXLESS),1)
+	AUTHOR_STRING_1 ?= F4HWN
+	VERSION_STRING_1 ?= v3.3
 
-	AUTHOR_STRING_2 ?= F4HWN
-	VERSION_STRING_2 ?= v3.3
+	AUTHOR_STRING_2 ?= Voxless
+	VERSION_STRING_2 ?= v1.0.4
 
 	AUTHOR_STRING ?= $(AUTHOR_STRING_1)+$(AUTHOR_STRING_2)
 	VERSION_STRING ?= $(VERSION_STRING_2)
@@ -246,7 +247,7 @@ endif
 
 CFLAGS =
 ifeq ($(ENABLE_CLANG),0)
-	CFLAGS += -Oz -Wall -Werror -mcpu=cortex-m0 -fshort-enums -fno-delete-null-pointer-checks -std=c2x -MMD
+	CFLAGS += -Oz -Wall -Werror -mcpu=cortex-m0 -fshort-enums -fno-delete-null-pointer-checks -funroll-all-loops -fmerge-all-constants -std=c2x -MMD
 	#CFLAGS += -Os -Wall -Werror -mcpu=cortex-m0 -fno-builtin -fshort-enums -fno-delete-null-pointer-checks -std=c2x -MMD
 	#CFLAGS += -Os -Wall -Werror -mcpu=cortex-m0 -fno-builtin -fshort-enums -fno-delete-null-pointer-checks -std=c11 -MMD
 	#CFLAGS += -Os -Wall -Werror -mcpu=cortex-m0 -fno-builtin -fshort-enums -fno-delete-null-pointer-checks -std=c99 -MMD
